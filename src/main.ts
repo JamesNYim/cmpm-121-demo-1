@@ -29,3 +29,9 @@ button.addEventListener("click", () => {
   counter += 1;
   counterDiv.textContent = `${counter}`;
 });
+
+// Auto Clicker
+setInterval(() => {
+	counter += 1;
+	counterDiv.textContent = `${counter}`
+}, 1000);
