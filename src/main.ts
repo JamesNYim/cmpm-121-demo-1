@@ -38,7 +38,7 @@ function incrementCounter(timestamp: number) {
   if (lastTimestamp !== undefined) {
     counter += growthRate / 1000;
     counterDiv.textContent = `${counter.toFixed(2)}`;
-	checkUpgradeAvailability();
+    checkUpgradeAvailability();
   }
   lastTimestamp = timestamp;
   requestAnimationFrame(incrementCounter);
@@ -46,21 +46,23 @@ function incrementCounter(timestamp: number) {
 requestAnimationFrame(incrementCounter);
 
 // Upgrade Button
-const upgradeButton = document.createElement('button');
+const upgradeButton = document.createElement("button");
 upgradeButton.textContent = "Upgrade";
 upgradeButton.style.fontSize = "20px";
+upgradeButton.style.alignSelf = "center";
+upgradeButton.style.margin = " 10px";
 upgradeButton.disabled = true;
 document.appendChild(upgradeButton);
 
-upgradeButton.addEventListener('click', () => {
-	if (counter >= 10) {
-		counter -= 10;
-		growthRate += 1;
-		counterDiv.textContent = `${counter}`
-		checkUpgradeAvailability();
-	}
-})
+upgradeButton.addEventListener("click", () => {
+  if (counter >= 10) {
+    counter -= 10;
+    growthRate += 1;
+    counterDiv.textContent = `${counter}`;
+    checkUpgradeAvailability();
+  }
+});
 // Checking for upgrades
 function checkUpgradeAvailability() {
-	upgradeButton.disabled = counter < 10;
+  upgradeButton.disabled = counter < 10;
 }
