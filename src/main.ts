@@ -30,8 +30,16 @@ button.addEventListener("click", () => {
   counterDiv.textContent = `${counter}`;
 });
 
-// Auto Clicker
-setInterval(() => {
-	counter += 1;
-	counterDiv.textContent = `${counter}`
-}, 1000);
+// Tracking time for requestAnimationFrame
+let lastTimestamp: number;
+function incrementCounter(timestamp: number) {
+	if (lastTimestamp !== undefined) {
+		const elapsed = timestamp - lastTimestamp;
+		counter += elapsed / 1000;
+		counterDiv.textContent = `${counter.toFixed(2)}`
+	}
+	lastTimestamp = timestamp;
+	requestAnimationFrame(incrementCounter);
+}
+
+requestAnimationFrame(incrementCounter);
