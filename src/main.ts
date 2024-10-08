@@ -10,8 +10,22 @@ header.innerHTML = gameName;
 app.append(header);
 
 // Create Button
-const button = document.createElement('button');
-button.textContent = '🌿';
-button.style.fontSize = '32px';
-button.className = 'plantButton';
+const button = document.createElement("button");
+button.textContent = "🌿";
+button.style.fontSize = "32px";
+button.className = "plantButton";
 document.body.appendChild(button);
+
+// Counter
+let counter: number = 0;
+const counterDiv = document.createElement("div");
+counterDiv.textContent = `${counter}`;
+counterDiv.style.margin = "10px 0";
+counterDiv.style.fontSize = "20px";
+document.body.appendChild(counterDiv);
+
+// Click behavior
+button.addEventListener("click", () => {
+  counter += 1;
+  counterDiv.textContent = `${counter}`;
+});
