@@ -49,10 +49,8 @@ requestAnimationFrame(incrementCounter);
 const upgradeButton = document.createElement("button");
 upgradeButton.textContent = "Upgrade";
 upgradeButton.style.fontSize = "20px";
-upgradeButton.style.alignSelf = "center";
-upgradeButton.style.margin = " 10px";
 upgradeButton.disabled = true;
-document.appendChild(upgradeButton);
+document.body.appendChild(upgradeButton);
 
 upgradeButton.addEventListener("click", () => {
   if (counter >= 10) {
