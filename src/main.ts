@@ -35,7 +35,7 @@ button.addEventListener("click", () => {
 let lastTimestamp: number;
 function incrementCounter(timestamp: number) {
   if (lastTimestamp !== undefined) {
-    const delta = timestamp - lastTimestamp
+    const delta = timestamp - lastTimestamp;
     counter += (growthRate * delta) / 1000;
     counterDiv.textContent = `${counter.toFixed(1)}`;
     checkUpgradeAvailability();
@@ -47,74 +47,58 @@ requestAnimationFrame(incrementCounter);
 
 // Upgrade Buttons
 // Farmer Upgrade
-const farmerUpgrade = document.createElement("button");
-let farmerUpgradeCounter = 0;
-farmerUpgrade.textContent = "🧑‍🌾";
-farmerUpgrade.style.fontSize = "20px";
-farmerUpgrade.style.margin = "5%";
-farmerUpgrade.disabled = true;
-document.body.appendChild(farmerUpgrade);
-farmerUpgrade.addEventListener("click", () => {
-  if (counter >= 10) {
-    counter -= 10;
-    farmerUpgradeCounter++;
-    growthRate += 0.1;
-    counterDiv.textContent = `${counter}`;
-    farmerUpgrade.textContent = `${farmerUpgradeCounter}🧑‍🌾`;
-    checkUpgradeAvailability();
-    updateGrowthRate();
-  }
+interface Item {
+  readonly name: string,
+  isPurchasable: boolean
+  cost: number,
+  rate: number,
+  amount: number,
+  readonly icon: string,
+};
+
+const availableItems : Item[] = [
+  {name: "farmer", isPurchasable: false, cost: 10, rate: 0.1, amount: 0, icon:"🧑‍🌾"},
+  {name: "tractor", isPurchasable: false, cost: 100, rate: 2, amount:0, icon:"🚜"},
+  {name: "factory", isPurchasable: false, cost: 1000, rate: 50, amount: 0, icon:"🏭"}
+]
+
+// Rendering the upgrade items
+availableItems.forEach((item, index) => {
+  const button = document.createElement("button");
+  button.textContent = `${item.icon} ${item.cost} (${item.rate} / sec)`;
+  button.style.fontSize = "20px";
+  button.style.margin = "10px";
+  button.disabled = !item.isPurchasable;
+  document.body.appendChild(button);
+
+  button.addEventListener("click", () => {
+    if (counter >= item.cost) {
+      counter -= item.cost;
+      item.cost = parseFloat((item.cost * 1.15).toFixed(2)); 
+      button.textContent = `${item.icon} ${item.cost} (${item.rate} / sec)`;
+      growthRate += item.rate;
+      counterDiv.textContent = `${counter.toString(2)}`;
+      checkUpgradeAvailability();
+      updateGrowthRate();
+    }
+  });
 });
-
-// Tractor Upgrade
-const tractorUpgrade = document.createElement("button");
-let tractorUpgradeCounter = 0;
-tractorUpgrade.textContent = "🚜";
-tractorUpgrade.style.fontSize = "20px";
-tractorUpgrade.style.margin = "5%";
-tractorUpgrade.disabled = true;
-document.body.appendChild(tractorUpgrade);
-tractorUpgrade.addEventListener("click", () => {
-  if (counter >= 100) {
-    counter -= 100;
-    growthRate += 1;
-    tractorUpgradeCounter++;
-    tractorUpgrade.textContent = `${tractorUpgradeCounter}🚜`;
-    counterDiv.textContent = `${counter}`;
-    checkUpgradeAvailability();
-    updateGrowthRate();
-  }
-});
-
-// Factory Upgrade
-const factoryUpgrade = document.createElement("button");
-let factoryUpgradeCounter = 0;
-factoryUpgrade.textContent = "🏭";
-factoryUpgrade.style.fontSize = "20px";
-factoryUpgrade.style.margin = "5%";
-factoryUpgrade.disabled = true;
-document.body.appendChild(factoryUpgrade);
-factoryUpgrade.addEventListener("click", () => {
-  if (counter >= 1000) {
-    counter -= 1000;
-    growthRate += 2;
-    factoryUpgradeCounter++;
-    factoryUpgrade.textContent = `${factoryUpgradeCounter} 🏭`;
-    counterDiv.textContent = `${counter}`;
-    checkUpgradeAvailability();
-    updateGrowthRate();
-  }
-});
-
-// Checking for upgrades
-function checkUpgradeAvailability() {
-  farmerUpgrade.disabled = counter < 10;
-  tractorUpgrade.disabled = counter < 100;
-  factoryUpgrade.disabled = counter < 1000;
-}
-
-const growthRateDiv = document.createElement("text");
+const growthRateDiv = document.createElement("div");
+growthRateDiv.style.fontSize = "20px";
 document.body.appendChild(growthRateDiv);
+updateGrowthRate();
+
 function updateGrowthRate() {
   growthRateDiv.textContent = `${growthRate.toFixed(2)} plants / second`;
+  console.log("Updating growth rate");
 }
+
+function checkUpgradeAvailability() {
+  availableItems.forEach((item, index) => {
+    const button = document.querySelectorAll("button")[index + 1];  // Assumes the game button is the first, +1 for offset
+    item.isPurchasable = counter >= item.cost;
+    button.disabled = !item.isPurchasable;
+  });
+}
+
+
