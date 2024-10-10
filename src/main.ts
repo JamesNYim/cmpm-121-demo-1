@@ -45,22 +45,72 @@ function incrementCounter(timestamp: number) {
 }
 requestAnimationFrame(incrementCounter);
 
-// Upgrade Button
-const upgradeButton = document.createElement("button");
-upgradeButton.textContent = "Upgrade";
-upgradeButton.style.fontSize = "20px";
-upgradeButton.disabled = true;
-document.body.appendChild(upgradeButton);
-
-upgradeButton.addEventListener("click", () => {
+// Upgrade Buttons
+// Farmer Upgrade
+const farmerUpgrade = document.createElement("button");
+let farmerUpgradeCounter = 0;
+farmerUpgrade.textContent = "🧑‍🌾";
+farmerUpgrade.style.fontSize = "20px";
+farmerUpgrade.disabled = true;
+document.body.appendChild(farmerUpgrade);
+farmerUpgrade.addEventListener("click", () => {
   if (counter >= 10) {
     counter -= 10;
-    growthRate += 1;
+    farmerUpgradeCounter++;
+    growthRate += .1;
     counterDiv.textContent = `${counter}`;
+    farmerUpgrade.textContent = `${farmerUpgradeCounter}🧑‍🌾`;
     checkUpgradeAvailability();
+    updateGrowthRate();
   }
 });
+
+// Tractor Upgrade
+const tractorUpgrade = document.createElement("button");
+let tractorUpgradeCounter = 0;
+tractorUpgrade.textContent = "🚜";
+tractorUpgrade.style.fontSize = "20px";
+tractorUpgrade.disabled = true;
+document.body.appendChild(tractorUpgrade);
+tractorUpgrade.addEventListener("click", () => {
+  if (counter >= 100) {
+    counter -= 100;
+    growthRate += 2;
+    tractorUpgradeCounter++;
+    tractorUpgrade.textContent = `${tractorUpgradeCounter}🚜`;
+    counterDiv.textContent = `${counter}`;
+    checkUpgradeAvailability();
+    updateGrowthRate();
+  }
+});
+
+// Factory Upgrade
+const factoryUpgrade = document.createElement("button");
+let factoryUpgradeCounter = 0;
+factoryUpgrade.textContent = "🏭";
+factoryUpgrade.style.fontSize = "20px";
+factoryUpgrade.disabled = true;
+document.body.appendChild(factoryUpgrade);
+factoryUpgrade.addEventListener("click", () => {
+  if (counter >= 1000) {
+    counter -= 1000;
+    growthRate += 2;
+    factoryUpgradeCounter++;    
+    factoryUpgrade.textContent = `${factoryUpgradeCounter} 🏭`;
+    counterDiv.textContent = `${counter}`;
+    checkUpgradeAvailability();
+    updateGrowthRate();
+  }
+});
+
 // Checking for upgrades
 function checkUpgradeAvailability() {
-  upgradeButton.disabled = counter < 10;
+  farmerUpgrade.disabled = counter < 10;
+  tractorUpgrade.disabled = counter < 100;
+  factoryUpgrade.disabled = counter < 1000;
+}
+
+function updateGrowthRate() {
+  const growthRateDiv = document.createElement("text");
+  growthRateDiv.textContent = `${growthRate} plants / second`;
 }
