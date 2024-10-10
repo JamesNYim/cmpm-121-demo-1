@@ -35,8 +35,9 @@ button.addEventListener("click", () => {
 let lastTimestamp: number;
 function incrementCounter(timestamp: number) {
   if (lastTimestamp !== undefined) {
-    counter += growthRate / 1000;
-    counterDiv.textContent = `${counter.toFixed(2)}`;
+    const delta = timestamp - lastTimestamp
+    counter += (growthRate * delta) / 1000;
+    counterDiv.textContent = `${counter.toFixed(1)}`;
     checkUpgradeAvailability();
   }
   lastTimestamp = timestamp;
@@ -76,7 +77,7 @@ document.body.appendChild(tractorUpgrade);
 tractorUpgrade.addEventListener("click", () => {
   if (counter >= 100) {
     counter -= 100;
-    growthRate += 2;
+    growthRate += 1;
     tractorUpgradeCounter++;
     tractorUpgrade.textContent = `${tractorUpgradeCounter}🚜`;
     counterDiv.textContent = `${counter}`;
