@@ -63,7 +63,7 @@ const availableItems : Item[] = [
 ]
 
 // Rendering the upgrade items
-availableItems.forEach((item, index) => {
+availableItems.forEach((item) => {
   const button = document.createElement("button");
   button.textContent = `${item.icon} ${item.cost} (${item.rate} / sec)`;
   button.style.fontSize = "20px";
