@@ -57,7 +57,7 @@ farmerUpgrade.addEventListener("click", () => {
   if (counter >= 10) {
     counter -= 10;
     farmerUpgradeCounter++;
-    growthRate += .1;
+    growthRate += 0.1;
     counterDiv.textContent = `${counter}`;
     farmerUpgrade.textContent = `${farmerUpgradeCounter}🧑‍🌾`;
     checkUpgradeAvailability();
@@ -95,7 +95,7 @@ factoryUpgrade.addEventListener("click", () => {
   if (counter >= 1000) {
     counter -= 1000;
     growthRate += 2;
-    factoryUpgradeCounter++;    
+    factoryUpgradeCounter++;
     factoryUpgrade.textContent = `${factoryUpgradeCounter} 🏭`;
     counterDiv.textContent = `${counter}`;
     checkUpgradeAvailability();
@@ -110,7 +110,8 @@ function checkUpgradeAvailability() {
   factoryUpgrade.disabled = counter < 1000;
 }
 
+const growthRateDiv = document.createElement("text");
+document.body.appendChild(growthRateDiv);
 function updateGrowthRate() {
-  const growthRateDiv = document.createElement("text");
   growthRateDiv.textContent = `${growthRate} plants / second`;
 }
