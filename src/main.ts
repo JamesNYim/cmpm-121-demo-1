@@ -21,7 +21,6 @@ let counter: number = 0;
 let growthRate: number = 0;
 const counterDiv = document.createElement("div");
 counterDiv.textContent = `${counter}`;
-counterDiv.style.margin = "10px 0";
 counterDiv.style.fontSize = "20px";
 document.body.appendChild(counterDiv);
 
@@ -51,6 +50,7 @@ const farmerUpgrade = document.createElement("button");
 let farmerUpgradeCounter = 0;
 farmerUpgrade.textContent = "🧑‍🌾";
 farmerUpgrade.style.fontSize = "20px";
+farmerUpgrade.style.margin = "5%";
 farmerUpgrade.disabled = true;
 document.body.appendChild(farmerUpgrade);
 farmerUpgrade.addEventListener("click", () => {
@@ -70,6 +70,7 @@ const tractorUpgrade = document.createElement("button");
 let tractorUpgradeCounter = 0;
 tractorUpgrade.textContent = "🚜";
 tractorUpgrade.style.fontSize = "20px";
+tractorUpgrade.style.margin = "5%";
 tractorUpgrade.disabled = true;
 document.body.appendChild(tractorUpgrade);
 tractorUpgrade.addEventListener("click", () => {
@@ -89,6 +90,7 @@ const factoryUpgrade = document.createElement("button");
 let factoryUpgradeCounter = 0;
 factoryUpgrade.textContent = "🏭";
 factoryUpgrade.style.fontSize = "20px";
+factoryUpgrade.style.margin = "5%";
 factoryUpgrade.disabled = true;
 document.body.appendChild(factoryUpgrade);
 factoryUpgrade.addEventListener("click", () => {
@@ -113,5 +115,5 @@ function checkUpgradeAvailability() {
 const growthRateDiv = document.createElement("text");
 document.body.appendChild(growthRateDiv);
 function updateGrowthRate() {
-  growthRateDiv.textContent = `${growthRate} plants / second`;
+  growthRateDiv.textContent = `${growthRate.toFixed(2)} plants / second`;
 }
