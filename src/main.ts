@@ -18,12 +18,12 @@ document.body.appendChild(button);
 
 // Counter from Cookies
 let counter: number = 0;
-const savedCounter = getCookie('counter');
+const savedCounter = getCookie("counter");
 if (savedCounter) counter = parseFloat(savedCounter);
 
 // Growth Rate from Cookies
 let growthRate: number = 0;
-const savedGrowthRate = getCookie('growthRate');
+const savedGrowthRate = getCookie("growthRate");
 if (savedGrowthRate) growthRate = parseFloat(savedGrowthRate);
 const counterDiv = document.createElement("div");
 counterDiv.textContent = `${counter}`;
@@ -91,7 +91,7 @@ const availableItems: Item[] = [
 
 // Rendering the upgrade items
 availableItems.forEach((item) => {
-  const savedItemCost = getCookie(item.name + 'cost');
+  const savedItemCost = getCookie(item.name + "cost");
   if (savedItemCost) item.cost = parseFloat(savedItemCost);
 
   const button = document.createElement("button");
@@ -137,7 +137,9 @@ function checkUpgradeAvailability() {
 }
 
 function setCookie(name: string, value: string, days: number) {
-  const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
+  const expires = new Date(
+    Date.now() + days * 24 * 60 * 60 * 1000,
+  ).toUTCString();
   document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
 }
 
@@ -147,10 +149,9 @@ function getCookie(name: string): string | null {
 }
 
 function saveState() {
-  setCookie('counter', counter.toString(), 7);
-  setCookie('growthRate', growthRate.toString(), 7);
+  setCookie("counter", counter.toString(), 7);
+  setCookie("growthRate", growthRate.toString(), 7);
   availableItems.forEach((item) => {
-    setCookie(item.name + 'cost', item.cost.toString(), 7);
-  })
-
+    setCookie(item.name + "cost", item.cost.toString(), 7);
+  });
 }
