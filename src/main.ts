@@ -57,7 +57,6 @@ function incrementCounter(timestamp: number) {
 requestAnimationFrame(incrementCounter);
 
 // Upgrade Buttons
-// Farmer Upgrade
 interface Item {
   readonly name: string;
   isPurchasable: boolean;
@@ -94,30 +93,37 @@ const availableItems: Item[] = [
   },
 ];
 
-// Rendering the upgrade items
-availableItems.forEach((item) => {
-  const savedItemCost = getCookie(item.name + "cost");
-  if (savedItemCost) item.cost = parseFloat(savedItemCost);
-
+function createUpgradeButton(item: Item): HTMLButtonElement {
   const button = document.createElement("button");
   button.textContent = `${item.icon} ${item.cost} (${item.rate} / sec)`;
   button.style.fontSize = COUNTER_FONT_SIZE;
   button.style.margin = BUTTON_MARGIN;
   button.disabled = !item.isPurchasable;
-  document.body.appendChild(button);
-
+  
   button.addEventListener("click", () => {
     if (counter >= item.cost) {
       counter -= item.cost;
       item.cost = parseFloat((item.cost * COST_MULTIPLIER).toFixed(2));
       button.textContent = `${item.icon} ${item.cost} (${item.rate} / sec)`;
       growthRate += item.rate;
-      counterDiv.textContent = `${counter.toString(2)}`;
+      counterDiv.textContent = `${counter.toFixed(2)}`;
       checkUpgradeAvailability();
       updateGrowthRate();
     }
   });
+
+  return button;
+}
+
+// Rendering the upgrade items
+availableItems.forEach((item) => {
+  const savedItemCost = getCookie(item.name + "cost");
+  if (savedItemCost) item.cost = parseFloat(savedItemCost);
+
+  const button = createUpgradeButton(item);
+  document.body.appendChild(button);
 });
+
 const growthRateDiv = document.createElement("div");
 growthRateDiv.style.fontSize = COUNTER_FONT_SIZE;
 document.body.appendChild(growthRateDiv);
