@@ -14,12 +14,12 @@ const header = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
 
-// Create Button
-const button = document.createElement("button");
-button.textContent = "🌿";
-button.style.fontSize = PLANT_BUTTON_FONT_SIZE;
-button.className = "plantButton";
-document.body.appendChild(button);
+// Create Plant Button
+const plantButton = document.createElement("button");
+plantButton.textContent = "🌿";
+plantButton.style.fontSize = PLANT_BUTTON_FONT_SIZE;
+plantButton.className = "plantButton";
+document.body.appendChild(plantButton);
 
 // Counter from Cookies
 let counter: number = 0;
@@ -30,13 +30,14 @@ if (savedCounter) counter = parseFloat(savedCounter);
 let growthRate: number = 0;
 const savedGrowthRate = getCookie("growthRate");
 if (savedGrowthRate) growthRate = parseFloat(savedGrowthRate);
+
 const counterDiv = document.createElement("div");
 counterDiv.textContent = `${counter}`;
 counterDiv.style.fontSize = COUNTER_FONT_SIZE;
 document.body.appendChild(counterDiv);
 
 // Click behavior
-button.addEventListener("click", () => {
+plantButton.addEventListener("click", () => {
   counter += 1;
   counterDiv.textContent = `${counter}`;
   checkUpgradeAvailability();
@@ -44,6 +45,7 @@ button.addEventListener("click", () => {
 
 // Tracking time for requestAnimationFrame
 let lastTimestamp: number;
+
 function incrementCounter(timestamp: number) {
   if (lastTimestamp !== undefined) {
     const delta = timestamp - lastTimestamp;
@@ -93,13 +95,16 @@ const availableItems: Item[] = [
   },
 ];
 
+// Store button references in a Map
+const itemButtonMap = new Map<Item, HTMLButtonElement>();
+
 function createUpgradeButton(item: Item): HTMLButtonElement {
   const button = document.createElement("button");
   button.textContent = `${item.icon} ${item.cost} (${item.rate} / sec)`;
   button.style.fontSize = COUNTER_FONT_SIZE;
   button.style.margin = BUTTON_MARGIN;
   button.disabled = !item.isPurchasable;
-  
+
   button.addEventListener("click", () => {
     if (counter >= item.cost) {
       counter -= item.cost;
@@ -115,13 +120,14 @@ function createUpgradeButton(item: Item): HTMLButtonElement {
   return button;
 }
 
-// Rendering the upgrade items
-availableItems.forEach((item) => {
+// Render the upgrade items and map buttons
+availableItems.forEach(item => {
   const savedItemCost = getCookie(item.name + "cost");
   if (savedItemCost) item.cost = parseFloat(savedItemCost);
 
   const button = createUpgradeButton(item);
   document.body.appendChild(button);
+  itemButtonMap.set(item, button); // Map each item to its button
 });
 
 const growthRateDiv = document.createElement("div");
@@ -140,17 +146,17 @@ function updateGrowthRate() {
 }
 
 function checkUpgradeAvailability() {
-  availableItems.forEach((item, index) => {
-    const button = document.querySelectorAll("button")[index + 1]; // Assumes the game button is the first, +1 for offset
-    item.isPurchasable = counter >= item.cost;
-    button.disabled = !item.isPurchasable;
+  availableItems.forEach(item => {
+    const button = itemButtonMap.get(item); 
+    if (button) {
+      item.isPurchasable = counter >= item.cost;
+      button.disabled = !item.isPurchasable;
+    }
   });
 }
 
 function setCookie(name: string, value: string, days: number) {
-  const expires = new Date(
-    Date.now() + days * 24 * 60 * 60 * 1000,
-  ).toUTCString();
+  const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
   document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
 }
 
@@ -162,7 +168,7 @@ function getCookie(name: string): string | null {
 function saveState() {
   setCookie("counter", counter.toString(), DAYS_TO_EXPIRE);
   setCookie("growthRate", growthRate.toString(), DAYS_TO_EXPIRE);
-  availableItems.forEach((item) => {
+  availableItems.forEach(item => {
     setCookie(item.name + "cost", item.cost.toString(), DAYS_TO_EXPIRE);
   });
 }
