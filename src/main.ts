@@ -1,5 +1,10 @@
 import "./style.css";
 
+const COST_MULTIPLIER = 1.15;
+const PLANT_BUTTON_FONT_SIZE = "32px"; 
+const COUNTER_FONT_SIZE = "20px";
+const BUTTON_MARGIN = "10px";
+const DAYS_TO_EXPIRE = 7;
 const app: HTMLDivElement = document.querySelector("#app")!;
 
 const gameName = "Plant Clicker";
@@ -12,7 +17,7 @@ app.append(header);
 // Create Button
 const button = document.createElement("button");
 button.textContent = "🌿";
-button.style.fontSize = "32px";
+button.style.fontSize = PLANT_BUTTON_FONT_SIZE;
 button.className = "plantButton";
 document.body.appendChild(button);
 
@@ -27,7 +32,7 @@ const savedGrowthRate = getCookie("growthRate");
 if (savedGrowthRate) growthRate = parseFloat(savedGrowthRate);
 const counterDiv = document.createElement("div");
 counterDiv.textContent = `${counter}`;
-counterDiv.style.fontSize = "20px";
+counterDiv.style.fontSize = COUNTER_FONT_SIZE;
 document.body.appendChild(counterDiv);
 
 // Click behavior
@@ -96,15 +101,15 @@ availableItems.forEach((item) => {
 
   const button = document.createElement("button");
   button.textContent = `${item.icon} ${item.cost} (${item.rate} / sec)`;
-  button.style.fontSize = "20px";
-  button.style.margin = "10px";
+  button.style.fontSize = COUNTER_FONT_SIZE;
+  button.style.margin = BUTTON_MARGIN;
   button.disabled = !item.isPurchasable;
   document.body.appendChild(button);
 
   button.addEventListener("click", () => {
     if (counter >= item.cost) {
       counter -= item.cost;
-      item.cost = parseFloat((item.cost * 1.15).toFixed(2));
+      item.cost = parseFloat((item.cost * COST_MULTIPLIER).toFixed(2));
       button.textContent = `${item.icon} ${item.cost} (${item.rate} / sec)`;
       growthRate += item.rate;
       counterDiv.textContent = `${counter.toString(2)}`;
@@ -114,7 +119,7 @@ availableItems.forEach((item) => {
   });
 });
 const growthRateDiv = document.createElement("div");
-growthRateDiv.style.fontSize = "20px";
+growthRateDiv.style.fontSize = COUNTER_FONT_SIZE;
 document.body.appendChild(growthRateDiv);
 updateGrowthRate();
 
@@ -149,9 +154,9 @@ function getCookie(name: string): string | null {
 }
 
 function saveState() {
-  setCookie("counter", counter.toString(), 7);
-  setCookie("growthRate", growthRate.toString(), 7);
+  setCookie("counter", counter.toString(), DAYS_TO_EXPIRE);
+  setCookie("growthRate", growthRate.toString(), DAYS_TO_EXPIRE);
   availableItems.forEach((item) => {
-    setCookie(item.name + "cost", item.cost.toString(), 7);
+    setCookie(item.name + "cost", item.cost.toString(), DAYS_TO_EXPIRE);
   });
 }
